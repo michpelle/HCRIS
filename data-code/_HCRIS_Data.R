@@ -9,8 +9,6 @@ if (!require("pacman")) install.packages("pacman")
 pacman::p_load(tidyverse, ggplot2, dplyr, lubridate)
 source('data-code/paths.R')
 
-
-
 # Read and combine data ---------------------------------------------------
 path.raw=path.data.1996
 source('data-code/H1_HCRISv1996.R')
