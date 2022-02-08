@@ -73,4 +73,4 @@ for (i in 2010:2017) {
     final.hcris.v2010=rbind(final.hcris.v2010,get(paste("final.reports.",i,sep="")))
   }
 }
-write_rds(final.hcris.v2010,'data/HCRIS_Data_v2010.rds')
+write_rds(final.hcris.v2010,'Data/HCRIS_Data_v2010.rds')
