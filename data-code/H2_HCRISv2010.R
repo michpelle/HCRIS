@@ -5,6 +5,7 @@
 ## Notes:         R file to read in HCRIS data (2010 version of forms)
 ########################################################################################
 
+library(tidyverse)
 
 ########################################################################################
 ## List variables and locations
@@ -38,12 +39,15 @@ colnames(hcris.vars)=c("variable","WKSHT_CD","LINE_NUM","CLMN_NUM","source")
 ########################################################################################
 ## Pull relevant data
 ########################################################################################
+
+path.raw = "/data/hcris/HCRIS_v2010"
+
 for (i in 2010:2017) {
-  HCRIS.alpha=read_csv(paste(path.raw,"/HOSP10_",i,"_ALPHA.CSV",sep=""),
+  HCRIS.alpha=read_csv(paste(path.raw,"/HospitalFY",i,"/hosp10_",i,"_ALPHA.CSV",sep=""),
                        col_names=c('RPT_REC_NUM','WKSHT_CD','LINE_NUM','CLMN_NUM','ITM_VAL_NUM'))
-  HCRIS.numeric=read_csv(paste(path.raw,"/HOSP10_",i,"_NMRC.CSV",sep=""),
+  HCRIS.numeric=read_csv(paste(path.raw,"/HospitalFY",i,"/hosp10_",i,"_NMRC.CSV",sep=""),
                          col_names=c('RPT_REC_NUM','WKSHT_CD','LINE_NUM','CLMN_NUM','ITM_VAL_NUM'))
-  HCRIS.report=read_csv(paste(path.raw,"/HOSP10_",i,"_RPT.CSV",sep=""),
+  HCRIS.report=read_csv(paste(path.raw,"/HospitalFY",i,"/hosp10_",i,"_RPT.CSV",sep=""),
                         col_names=c('RPT_REC_NUM','PRVDR_CTRL_TYPE_CD','PRVDR_NUM','NPI',
                                     'RPT_STUS_CD','FY_BGN_DT','FY_END_DT','PROC_DT',
                                     'INITL_RPT_SW','LAST_RPT_SW','TRNSMTL_NUM','FI_NUM',
@@ -63,8 +67,8 @@ for (i in 2010:2017) {
       select(report=RPT_REC_NUM, !!var.name:=ITM_VAL_NUM) 
     assign(paste("val.",v,sep=""),val)
     final.reports=left_join(final.reports, 
-              get(paste("val.",v,sep="")),
-              by="report")
+                            get(paste("val.",v,sep="")),
+                            by="report")
   }
   assign(paste("final.reports.",i,sep=""),final.reports)
   if (i==2010) {
@@ -73,4 +77,4 @@ for (i in 2010:2017) {
     final.hcris.v2010=rbind(final.hcris.v2010,get(paste("final.reports.",i,sep="")))
   }
 }
-write_rds(final.hcris.v2010,'Data/HCRIS_Data_v2010.rds')
+write_rds(final.hcris.v2010,'HCRIS_Data_v2010.rds')
